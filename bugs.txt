@@ -4,14 +4,38 @@
 #
 
 [zookd.c:1612]
+[zookd.c:70]
+[http.c:448,458]
 description goes here. for example, the 'buf' variable can be
 overwritten by the 'msg' variable because ...
+reqpath-muuttuja voi ylivuodon seurauksena kirjoittaa yli senhetkisen paluuosoitteen, koska reqpathin koko on rajoitettu, mutta missään ei tarkisteta, onko vastaaotettu syöte liian pitkä.
+dst-muuttuja (joka osoittaa reqpath-muuttujaan, jolle on annettu staattinen koko) voi kirjoittaa yli paluuosoitteen, jota tarvitaan process_clientista sitä kutsuneeseen ohjelmaan palattaessa.
+Ylivuoto tapahtuu,  jos HTTP-pyyntö on esim. seuraava:
+
+ merkkijono = "a"
+    req =   "GET /" + 2062 * merkkijono + " HTTP/1.0/\r\n" + \
+            "\r\n"
 
     <paste offending line(s) of code here>
+    if ((errmsg = http_request_line(fd, reqpath, env, &env_len)))
+    <*dst = strtol(&hexbuf[0], 0, 16);
+     *dst = *src;>
 
-[http.c:1512]
+
+[http.c:159]
+[http.c:448, 458]
 another description.
+value-muuttuja voi kirjoittaa yli muuttujan i, koska valuen koko on rajoitettu, eikä missään tarkisteta, meneekö vastaanotettu syöte yli rajojen.
+Ylivuoto tapahtuu, jos HTTP-pyyntö on seuraava:
+ 
+merkkijono = "a"
+    req =   "GET /" + " HTTP/1.0\r\n" + "Cookie: " + 540 * merkkijono + "\r\n" \
+            "\r\n"
 
     <paste offending line(s) of code here>
+    url_decode(value, sp);
+    <*dst = strtol(&hexbuf[0], 0, 16);
+     *dst = *src;>
+
 
 # many more come here

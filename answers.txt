@@ -1,1 +1,3 @@
 ## Place your answers here.
+
+exploit-2a.py: tämä tekee ylivuodon niin, että paluuosoite korvautuu uudella.

@@ -1,4 +1,12 @@
 ## Place your answers here.
 
+Exercise 2.
 exploit-2a.py: tämä tekee ylivuodon niin, että paluuosoite korvautuu uudella.
 exploit-2b.py: tämä ylivuoto korvaa kahvan funktioon.
+
+
+Exercise 3.
+reqpath-puskurin ylivuodon tapauksessa on myös mahdollista käyttää koodi-injektiota.
+pn-puskurin ylivuodon tapauksessa on myös mahdollista käyttää koodi-injektiota.
+
+unlink-funktion syscallnro on 10 eli '\n', jonka http_read_line muuttaa '\0':ksi, mikä rikkoo injektiokoodin. Tämän pystyy kiertämään käyttämällä urllib.quote-funktiota.

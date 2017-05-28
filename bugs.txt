@@ -2,8 +2,6 @@
 # [file:#lines]
 # desc
 #
-
-[zookd.c:1612]
 [zookd.c:70]
 [http.c:448,458]
 description goes here. for example, the 'buf' variable can be
@@ -24,9 +22,9 @@ Ylivuoto tapahtuu,  jos HTTP-pyyntö on esim. seuraava:
 Tämän pystyy estämään käyttämällä stack canary-menetelmää.
 
 
+
 [http.c:159]
 [http.c:448, 458]
-another description.
 value-muuttuja voi kirjoittaa yli paluuosoitteen, koska valuen koko on rajoitettu, eikä missään tarkisteta, meneekö vastaanotettu syöte yli rajojen.
 Ylivuoto tapahtuu, jos HTTP-pyyntö on seuraava:
  
@@ -34,20 +32,36 @@ merkkijono = "a"
     req =   "GET /" + " HTTP/1.0\r\n" + "Cookie: " + 540 * merkkijono + "\r\n" \
             "\r\n"
 
-    <paste offending line(s) of code here>
-    url_decode(value, sp);
+    <url_decode(value, sp);>
     <*dst = strtol(&hexbuf[0], 0, 16);
      *dst = *src;>
 
 Tämän pystyy estämään käyttämällä stack canary-menetelmää.
 
 
-# many more come here
-[http.c:448, 458]
-another description.
-pn-muuttuja voi kirjoittaa yli kahvan handler, koska pn:n koko on rajoitettu, eikä missään tarkisteta, meneekö vastaanotettu syöte yli rajojen.
-Ylivuoto tapahtuu, jos HTTP-pyyntö on seuraava: TODO
 
-    <paste offending line(s) of code here>
+[http.c:282]
+pn-muuttuja voi kirjoittaa yli kahvan handler, koska pn:n koko on rajoitettu, eikä missään tarkisteta, meneekö vastaanotettu syöte yli rajojen.
+Ylivuoto tapahtuu, jos HTTP-pyyntö on seuraava:
+
+merkkijono = "a"
+    req =   "GET /" + 1024 * merkkijono + " HTTP/1.0\r\n" + "\r\n" \
+            "\r\n"
+
+    <strcat(pn, name);>
 
 Tätä ei pysty estämään käyttämällä stack canary-menetelmää.
+
+
+
+[http.c:165]
+envvar-puskurissa voidaan aiheuttaa ylivuoto niin, että paluuosoite kirjoittuu yli. Tämä tapahtuu. koska missään ei tarkisteta, meneekö vastaanotettu syöte yli rajojen.
+Ylivuoto tapahtuu, jos HTTP-pyyntö on seuraava:
+
+ merkkijono = "a"
+    req =   "GET /" + " HTTP/1.0\r\n" + 1050 * merkkijono + ": " + "\r\n" \
+            "\r\n"
+
+    <sprintf(envvar, "HTTP_%s", buf);>
+
+Stack canary-menetelmällä tämä voidaan estää.

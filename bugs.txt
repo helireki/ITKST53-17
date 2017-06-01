@@ -1,8 +1,8 @@
 [zookd.c:70]
 [http.c:448,458]
-reqpath-muuttuja voi ylivuodon seurauksena kirjoittaa yli senhetkisen paluuosoitteen, koska reqpathin koko on rajoitettu, mutta missään ei tarkisteta, onko vastaaotettu syöte liian pitkä.
-dst-muuttuja (joka osoittaa reqpath-muuttujaan, jolle on annettu staattinen koko) voi kirjoittaa yli paluuosoitteen, jota tarvitaan process_clientista sitä kutsuneeseen ohjelmaan palattaessa.
-Ylivuoto tapahtuu,  jos HTTP-pyyntö on esim. seuraava:
+reqpath-puskuri voi ylivuodon seurauksena kirjoittaa yli senhetkisen paluuosoitteen, koska reqpathin koko on rajoitettu, mutta missään ei tarkisteta, onko vastaaotettu syöte liian pitkä.
+dst-muuttuja (joka osoittaa reqpathiin, jolle on annettu staattinen koko) voi kirjoittaa yli paluuosoitteen, jota tarvitaan process_clientista sitä kutsuneeseen ohjelmaan palattaessa.
+Ylivuoto tapahtuu, jos HTTP-pyyntö on esim. seuraava:
 
  merkkijono = "a"
     req =   "GET /" + 2066 * merkkijono + " HTTP/1.0/\r\n" + \
@@ -19,7 +19,7 @@ Tämän pystyy estämään käyttämällä stack canary -menetelmää.
 
 [http.c:159]
 [http.c:448, 458]
-value-muuttuja voi kirjoittaa yli paluuosoitteen, koska valuen koko on rajoitettu, eikä missään tarkisteta, meneekö vastaanotettu syöte yli rajojen.
+value-puskurin ylivuoto voi kirjoittaa yli paluuosoitteen, koska valuen koko on rajoitettu, eikä missään tarkisteta, meneekö vastaanotettu syöte yli rajojen.
 Ylivuoto tapahtuu, jos HTTP-pyyntö on seuraava:
  
 merkkijono = "a"
@@ -35,7 +35,7 @@ Tämän pystyy estämään käyttämällä stack canary -menetelmää.
 
 
 [http.c:282]
-pn-muuttuja voi kirjoittaa yli kahvan handler, koska pn:n koko on rajoitettu, eikä missään tarkisteta, meneekö vastaanotettu syöte yli rajojen.
+pn-puskuri voidaan ylivuotaa niin, että se kirjoittaa yli kahvan handler, koska pn:n koko on rajoitettu, eikä missään tarkisteta, meneekö vastaanotettu syöte yli rajojen.
 Ylivuoto tapahtuu, jos HTTP-pyyntö on seuraava:
 
 merkkijono = "a"

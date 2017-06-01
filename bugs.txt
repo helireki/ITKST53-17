@@ -1,11 +1,5 @@
-#
-# [file:#lines]
-# desc
-#
 [zookd.c:70]
 [http.c:448,458]
-description goes here. for example, the 'buf' variable can be
-overwritten by the 'msg' variable because ...
 reqpath-muuttuja voi ylivuodon seurauksena kirjoittaa yli senhetkisen paluuosoitteen, koska reqpathin koko on rajoitettu, mutta missään ei tarkisteta, onko vastaaotettu syöte liian pitkä.
 dst-muuttuja (joka osoittaa reqpath-muuttujaan, jolle on annettu staattinen koko) voi kirjoittaa yli paluuosoitteen, jota tarvitaan process_clientista sitä kutsuneeseen ohjelmaan palattaessa.
 Ylivuoto tapahtuu,  jos HTTP-pyyntö on esim. seuraava:
@@ -19,7 +13,7 @@ Ylivuoto tapahtuu,  jos HTTP-pyyntö on esim. seuraava:
     <*dst = strtol(&hexbuf[0], 0, 16);
      *dst = *src;>
 
-Tämän pystyy estämään käyttämällä stack canary-menetelmää.
+Tämän pystyy estämään käyttämällä stack canary -menetelmää.
 
 
 
@@ -36,7 +30,7 @@ merkkijono = "a"
     <*dst = strtol(&hexbuf[0], 0, 16);
      *dst = *src;>
 
-Tämän pystyy estämään käyttämällä stack canary-menetelmää.
+Tämän pystyy estämään käyttämällä stack canary -menetelmää.
 
 
 
@@ -50,7 +44,7 @@ merkkijono = "a"
 
     <strcat(pn, name);>
 
-Tätä ei pysty estämään käyttämällä stack canary-menetelmää.
+Tätä ei pysty estämään käyttämällä stack canary -menetelmää.
 
 
 
@@ -64,4 +58,19 @@ Ylivuoto tapahtuu, jos HTTP-pyyntö on seuraava:
 
     <sprintf(envvar, "HTTP_%s", buf);>
 
-Stack canary-menetelmällä tämä voidaan estää.
+Stack canary -menetelmällä tämä voidaan estää.
+
+
+
+[http.c:358]
+[http.c:344]
+name-puskurissa voidaan aiheuttaa ylivuoto niin, että paluuosoite kirjoittuu yli. Kuten edellä, tämäm tapahtuu, koska syötteen rajoja ei tarkisteta.
+Ylivuoto tapahtuu, jos HTTP-pyntö on seuraava:
+
+req = "GET /" + 200 * "zoobar/../" + "zoobar" + " HTTP/1.0\r\n" + "\r\n" \
+            "\r\n"
+
+    < dir_join(name, pn, indices[i]);>
+    <strcpy(dst, dirname);>
+
+Stack canary -menetelmä pystyy estämään tämän ylivuodon.

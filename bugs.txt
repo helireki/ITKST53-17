@@ -1,17 +1,76 @@
-#
-# [file:#lines]
-# desc
-#
+[zookd.c:70]
+[http.c:448,458]
+reqpath-puskuri voi ylivuodon seurauksena kirjoittaa yli senhetkisen paluuosoitteen, koska reqpathin koko on rajoitettu, mutta missään ei tarkisteta, onko vastaaotettu syöte liian pitkä.
+dst-muuttuja (joka osoittaa reqpathiin, jolle on annettu staattinen koko) voi kirjoittaa yli paluuosoitteen, jota tarvitaan process_clientista sitä kutsuneeseen ohjelmaan palattaessa.
+Ylivuoto tapahtuu, jos HTTP-pyyntö on esim. seuraava:
 
-[zookd.c:1612]
-description goes here. for example, the 'buf' variable can be
-overwritten by the 'msg' variable because ...
-
-    <paste offending line(s) of code here>
-
-[http.c:1512]
-another description.
+ merkkijono = "a"
+    req =   "GET /" + 2066 * merkkijono + " HTTP/1.0/\r\n" + \
+            "\r\n"
 
     <paste offending line(s) of code here>
+    <if ((errmsg = http_request_line(fd, reqpath, env, &env_len)))>
+    <*dst = strtol(&hexbuf[0], 0, 16);
+     *dst = *src;>
 
-# many more come here
+Tämän pystyy estämään käyttämällä stack canary -menetelmää.
+
+
+
+[http.c:159]
+[http.c:448, 458]
+value-puskurin ylivuoto voi kirjoittaa yli paluuosoitteen, koska valuen koko on rajoitettu, eikä missään tarkisteta, meneekö vastaanotettu syöte yli rajojen.
+Ylivuoto tapahtuu, jos HTTP-pyyntö on seuraava:
+ 
+merkkijono = "a"
+    req =   "GET /" + " HTTP/1.0\r\n" + "Cookie: " + 540 * merkkijono + "\r\n" \
+            "\r\n"
+
+    <url_decode(value, sp);>
+    <*dst = strtol(&hexbuf[0], 0, 16);
+     *dst = *src;>
+
+Tämän pystyy estämään käyttämällä stack canary -menetelmää.
+
+
+
+[http.c:282]
+pn-puskuri voidaan ylivuotaa niin, että se kirjoittaa yli kahvan handler, koska pn:n koko on rajoitettu, eikä missään tarkisteta, meneekö vastaanotettu syöte yli rajojen.
+Ylivuoto tapahtuu, jos HTTP-pyyntö on seuraava:
+
+merkkijono = "a"
+    req =   "GET /" + 1024 * merkkijono + " HTTP/1.0\r\n" + "\r\n" \
+            "\r\n"
+
+    <strcat(pn, name);>
+
+Tätä ei pysty estämään käyttämällä stack canary -menetelmää.
+
+
+
+[http.c:165]
+envvar-puskurissa voidaan aiheuttaa ylivuoto niin, että paluuosoite kirjoittuu yli. Tämä tapahtuu. koska missään ei tarkisteta, meneekö vastaanotettu syöte yli rajojen.
+Ylivuoto tapahtuu, jos HTTP-pyyntö on seuraava:
+
+ merkkijono = "a"
+    req =   "GET /" + " HTTP/1.0\r\n" + 1050 * merkkijono + ": " + "\r\n" \
+            "\r\n"
+
+    <sprintf(envvar, "HTTP_%s", buf);>
+
+Stack canary -menetelmällä tämä voidaan estää.
+
+
+
+[http.c:358]
+[http.c:344]
+name-puskurissa voidaan aiheuttaa ylivuoto niin, että paluuosoite kirjoittuu yli. Kuten edellä, tämäm tapahtuu, koska syötteen rajoja ei tarkisteta.
+Ylivuoto tapahtuu, jos HTTP-pyntö on seuraava:
+
+req = "GET /" + 200 * "zoobar/../" + "zoobar" + " HTTP/1.0\r\n" + "\r\n" \
+            "\r\n"
+
+    < dir_join(name, pn, indices[i]);>
+    <strcpy(dst, dirname);>
+
+Stack canary -menetelmä pystyy estämään tämän ylivuodon.

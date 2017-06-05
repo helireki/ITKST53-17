@@ -1,1 +1,20 @@
-## Place your answers here.
+Exercise 2.
+exploit-2a.py: tämä tekee ylivuodon niin, että paluuosoite korvautuu uudella.
+exploit-2b.py: tämä ylivuoto korvaa kahvan funktioon.
+
+
+Exercise 3.
+reqpath-puskurin ylivuodon tapauksessa on myös mahdollista käyttää koodi-injektiota.
+pn-puskurin ylivuodon tapauksessa on myös mahdollista käyttää koodi-injektiota.
+
+unlink-funktion syscallnro on 10 eli '\n', jonka http_read_line muuttaa '\0':ksi, mikä rikkoo injektiokoodin. Tämän pystyy kiertämään käyttämällä urllib.quote-funktiota.
+
+
+Exercise 4.
+Kaikki bugs.txt-tiedostossa olevia ylivuotoja voidaan käyttää hyväksi samalla tavalla, koska kaikissa on mahdollista kirjoittaa juuri oikea muistiosoite yli, ja saada tarvittavat argumentit oikeille paikoilleen.
+
+
+Exercise 5.
+Yksi haavoittuvuus serverissä on se, että käyttäjätunnusten syöttämistä ei ole rajoitettu. Tämä mahdollistaa sen, että hyökkääjällä on rajaton määrä mahdollisuuksia arvata käyttäjän salasanaa ilman, että serveri tekisi hidastustoimenpiteitä, esim. estäisi kolmen yrityksen jälkeen kirjautumisen 10 minuutiksi. Tätä rajoittaa se, että hyökkääjän pitäisi tietää etukäteen edes yksi validi käyttäjätunnus.
+
+Toinen haavoittuvuus on se, että serveri ei missään vaiheessa rajoita tunnuksia luodessa niiden muotoa. Hyökkääjälle tästä on etua siinä, että hyvin todennäköisesti joku käyttäjistä on luonut itselleen heikon käyttäjätunnuksen ja/tai salasanan, mikä helpottaa arvaamisprosessia. Minimimittojen ja erikoismerkkien vaatiminen vaikeuttaisi tätä prosessia.

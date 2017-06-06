@@ -80,9 +80,9 @@ set_perms 61012:61012 644 /jail/zoobar/bank.pyc
 set_perms 61012:61012 755 /jail/zoobar/bank_server.py
 set_perms 61012:61012 755 /jail/zoobar/db
 set_perms 61012:61012 755 /jail/zoobar/db/person
-set_perms 61012:61012 777 /jail/zoobar/db/person/person.db
+set_perms 61012:61012 755 /jail/zoobar/db/person/person.db
 set_perms 61012:61012 755 /jail/zoobar/db/transfer
-set_perms 61012:61012 777 /jail/zoobar/db/transfer/transfer.db
+set_perms 61012:61012 755 /jail/zoobar/db/transfer/transfer.db
 set_perms 61012:61012 644 /jail/zoobar/debug.py
 set_perms 61012:61012 644 /jail/zoobar/debug.pyc
 set_perms 61012:61012 644 /jail/zoobar/echo.py
@@ -114,3 +114,84 @@ set_perms 61012:61012 644 /jail/zoobar/zoobarjs.py
 set_perms 61012:61012 644 /jail/zoobar/zoobarjs.pyc
 set_perms 61012:61012 644 /jail/zoobar/zoodb.py
 set_perms 61012:61012 644 /jail/zoobar/zoodb.pyc
+
+#static 61013, dynamic 61014
+set_perms 61014:61014 750 /jail/zoobar/db
+set_perms 61014:61014 750 /jail/zoobar/db/person
+set_perms 61014:61014 750 /jail/zoobar/db/person/person.db
+set_perms 61014:61014 750 /jail/zoobar/db/transfer
+set_perms 61014:61014 750 /jail/zoobar/db/transfer/transfer.db
+
+#stat
+set_perms 61013:61013 644 /jail/zoobar/auth_client.py
+set_perms 61013:61013 644 /jail/zoobar/auth.py
+set_perms 61013:61013 644 /jail/zoobar/auth.pyc
+
+set_perms 61013:61013 754 /jail/zoobar/auth_server.py
+
+#stat
+set_perms 61013:61013 644 /jail/zoobar/bank.py
+set_perms 61013:61013 644 /jail/zoobar/bank.pyc
+
+set_perms 61013:61013 754 /jail/zoobar/bank_server.py
+
+#stat
+set_perms 61013:61013 644 /jail/zoobar/debug.py
+set_perms 61013:61013 644 /jail/zoobar/debug.pyc
+set_perms 61013:61013 644 /jail/zoobar/echo.py
+set_perms 61013:61013 644 /jail/zoobar/echo.pyc
+
+set_perms 61013:61013 754 /jail/zoobar/echo_server.py
+
+#stat
+set_perms 61013:61013 644 /jail/zoobar/.gitignore
+
+set_perms 0:61015 755 /jail/zoobar/index.cgi
+
+#stat
+set_perms 61013:61013 644 /jail/zoobar/index.py
+set_perms 61013:61013 644 /jail/zoobar/index.pyc
+
+set_perms 61013:61013 754 /jail/zoobar/__init__.py
+
+#stat
+set_perms 61013:61013 644 /jail/zoobar/__init__.pyc
+set_perms 61013:61013 644 /jail/zoobar/login.py
+set_perms 61013:61013 644 /jail/zoobar/login.pyc
+
+#dir
+set_perms 61013:61013 755 /jail/zoobar/media
+
+#stat
+set_perms 61013:61013 644 /jail/zoobar/media/lion_awake.jpg
+set_perms 61013:61013 644 /jail/zoobar/media/lion_sleeping.jpg
+set_perms 61013:61013 644 /jail/zoobar/media/zoobar.css
+
+#stat
+set_perms 61013:61013 644 /jail/zoobar/pbkdf2.py
+set_perms 61013:61013 644 /jail/zoobar/profile.py
+set_perms 61013:61013 644 /jail/zoobar/profile.pyc
+
+set_perms 61013:61013 754 /jail/zoobar/profile_server.py
+
+#stat
+set_perms 61013:61013 644 /jail/zoobar/rcplib.py
+set_perms 61013:61013 644 /jail/zoobar/rcplib.pyc
+set_perms 61013:61013 644 /jail/zoobar/sandboxlib.py
+
+#dir
+set_perms 61013:61013 755 /jail/zoobar/templates
+
+#stat
+set_perms 61013:61013 644 /jail/zoobar/transfer.py
+set_perms 61013:61013 644 /jail/zoobar/transfer.pyc
+set_perms 61013:61013 644 /jail/zoobar/users.py
+set_perms 61013:61013 644 /jail/zoobar/users.pyc
+set_perms 61013:61013 644 /jail/zoobar/.vimrc
+set_perms 61013:61013 644 /jail/zoobar/zoobarjs.py
+set_perms 61013:61013 644 /jail/zoobar/zoobarjs.pyc
+set_perms 61013:61013 644 /jail/zoobar/zoodb.py
+set_perms 61013:61013 644 /jail/zoobar/zoodb.pyc
+
+#argsia vartem
+#set_perms 0:61015 755 /jail/usr/bin/python

@@ -61,6 +61,9 @@ create_socket_dir /jail/echosvc 61010:61010 755
 #soketti authsvc:lle
 create_socket_dir /jail/authsvc 61016:61016 755
 
+#soketti banksvc:lle
+create_socket_dir /jail/banksvc 61017:61017 755
+
 mkdir -p /jail/tmp
 chmod a+rwxt /jail/tmp
 
@@ -73,61 +76,21 @@ rm -rf /jail/zoobar/db
 python /jail/zoobar/zoodb.py init-person
 python /jail/zoobar/zoodb.py init-transfer
 python /jail/zoobar/zoodb.py init-cred
-
-#set_perms 61012:61012 750 /jail/zoobar/index.cgi
-#set_perms 61012:61012 644 /jail/zoobar/auth_client.py
-#set_perms 61012:61012 644 /jail/zoobar/auth.py
-#set_perms 61012:61012 644 /jail/zoobar/auth.pyc
-#set_perms 61012:61012 755 /jail/zoobar/auth_server.py
-#set_perms 61012:61012 644 /jail/zoobar/bank.py
-#set_perms 61012:61012 644 /jail/zoobar/bank.pyc
-#set_perms 61012:61012 755 /jail/zoobar/bank_server.py
-#set_perms 61012:61012 755 /jail/zoobar/db
-#set_perms 61012:61012 755 /jail/zoobar/db/person
-#set_perms 61012:61012 755 /jail/zoobar/db/person/person.db
-#set_perms 61012:61012 755 /jail/zoobar/db/transfer
-#set_perms 61012:61012 755 /jail/zoobar/db/transfer/transfer.db
-#set_perms 61012:61012 644 /jail/zoobar/debug.py
-#set_perms 61012:61012 644 /jail/zoobar/debug.pyc
-#set_perms 61012:61012 644 /jail/zoobar/echo.py
-#set_perms 61012:61012 644 /jail/zoobar/echo.pyc
-#set_perms 61012:61012 755 /jail/zoobar/echo_server.py
-#set_perms 61012:61012 644 /jail/zoobar/.gitignore
-#set_perms 61012:61012 755 /jail/zoobar/index.cgi
-#set_perms 61012:61012 644 /jail/zoobar/index.py
-#set_perms 61012:61012 644 /jail/zoobar/index.pyc
-#set_perms 61012:61012 755 /jail/zoobar/__init__.py
-#set_perms 61012:61012 644 /jail/zoobar/__init__.pyc
-#set_perms 61012:61012 644 /jail/zoobar/login.py
-#set_perms 61012:61012 644 /jail/zoobar/login.pyc
-#set_perms 61012:61012 755 /jail/zoobar/media
-#set_perms 61012:61012 644 /jail/zoobar/pbkdf2.py
-#set_perms 61012:61012 644 /jail/zoobar/profile.py
-#set_perms 61012:61012 644 /jail/zoobar/profile.pyc
-#set_perms 61012:61012 755 /jail/zoobar/profile_server.py
-#set_perms 61012:61012 644 /jail/zoobar/rcplib.py
-#set_perms 61012:61012 644 /jail/zoobar/rcplib.pyc
-#set_perms 61012:61012 644 /jail/zoobar/sandboxlib.py
-#set_perms 61012:61012 755 /jail/zoobar/templates
-#set_perms 61012:61012 644 /jail/zoobar/transfer.py
-#set_perms 61012:61012 644 /jail/zoobar/transfer.pyc
-#set_perms 61012:61012 644 /jail/zoobar/users.py
-#set_perms 61012:61012 644 /jail/zoobar/users.pyc
-#set_perms 61012:61012 644 /jail/zoobar/.vimrc
-#set_perms 61012:61012 644 /jail/zoobar/zoobarjs.py
-#set_perms 61012:61012 644 /jail/zoobar/zoobarjs.pyc
-#set_perms 61012:61012 644 /jail/zoobar/zoodb.py
-#set_perms 61012:61012 644 /jail/zoobar/zoodb.pyc
+python /jail/zoobar/zoodb.py init-bank
 
 #static 61013, dynamic 61014
 set_perms 61013:61014 775 /jail/zoobar/db
 set_perms 61013:61014 775 /jail/zoobar/db/person
 set_perms 61013:61014 765 /jail/zoobar/db/person/person.db
-set_perms 61013:61014 775 /jail/zoobar/db/transfer
-set_perms 61013:61014 765 /jail/zoobar/db/transfer/transfer.db
+
+set_perms 61017:61014 775 /jail/zoobar/db/transfer
+set_perms 61017:61014 774 /jail/zoobar/db/transfer/transfer.db
 
 set_perms 61016:61014 700 /jail/zoobar/db/cred
 set_perms 61016:61014 744 /jail/zoobar/db/cred/cred.db
+
+set_perms 61017:61017 775 /jail/zoobar/db/bank
+set_perms 61017:61017 744 /jail/zoobar/db/bank/bank.db
 
 #stat
 set_perms 61013:61013 644 /jail/zoobar/auth_client.py

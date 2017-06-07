@@ -1,41 +1,57 @@
 from zoodb import *
 from debug import *
+from pbkdf2 import *
 
 import hashlib
 import random
+import os
 
-def newtoken(db, person):
-    hashinput = "%s%.10f" % (person.password, random.random())
-    person.token = hashlib.md5(hashinput).hexdigest()
+def newtoken(db, cred):
+    hashinput = "%s%.10f" % (cred.password, random.random())
+    cred.token = hashlib.md5(hashinput).hexdigest()
     db.commit()
-    return person.token
+    return cred.token
 
 def login(username, password):
-    db = person_setup()
-    person = db.query(Person).get(username)
+    db1 = person_setup()
+    db2 = cred_setup()
+    person = db1.query(Person).get(username)
     if not person:
         return None
-    if person.password == password:
-        return newtoken(db, person)
+    cred = db2.query(Cred).get(username)
+    hashed_pw = PBKDF2(password, cred.salt).hexread(32)
+    if cred.password == hashed_pw:
+        return newtoken(db2, cred)
     else:
         return None
 
 def register(username, password):
-    db = person_setup()
-    person = db.query(Person).get(username)
+    db1 = person_setup()
+    db2 = cred_setup()
+    person = db1.query(Person).get(username)
     if person:
         return None
     newperson = Person()
+    newcred = Cred()
     newperson.username = username
-    newperson.password = password
-    db.add(newperson)
-    db.commit()
-    return newtoken(db, newperson)
+
+    newcred.username = username
+    salt_uusi = os.urandom(128)
+    newcred.password = PBKDF2(password, salt_uusi).hexread(32)
+    newcred.salt = salt_uusi
+
+    db1.add(newperson)
+    db1.commit()
+    db2.add(newcred)
+    db2.commit()
+    return newtoken(db2, newcred)
 
 def check_token(username, token):
-    db = person_setup()
-    person = db.query(Person).get(username)
-    if person and person.token == token:
+    db1 = person_setup()
+    db2 = cred_setup()
+    person = db1.query(Person).get(username)
+    cred = db2.query(Cred).get(username)
+    if person and cred.token == token:
         return True
     else:
         return False

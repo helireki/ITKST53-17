@@ -64,6 +64,9 @@ create_socket_dir /jail/authsvc 61016:61016 755
 #soketti banksvc:lle
 create_socket_dir /jail/banksvc 61017:61017 755
 
+#soketti profilesvc:lle
+create_socket_dir /jail/profilesvc 61018:61018 755
+
 mkdir -p /jail/tmp
 chmod a+rwxt /jail/tmp
 

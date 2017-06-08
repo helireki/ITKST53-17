@@ -19,3 +19,8 @@ def check_token(username, token):
     with rpclib.client_connect('/authsvc/sock') as c:
         ret = c.call('check_token', username=username, token=token)
         return ret
+
+def get_token(username):
+    with rpclib.client_connect('/authsvc/sock') as c:
+        ret = c.call('get_token', username=username)
+        return ret

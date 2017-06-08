@@ -63,3 +63,15 @@ def check_token(username, token):
     else:
         return False
 
+def get_token(username):
+    db1 = person_setup()
+    person = db1.query(Person).get(username)
+
+    if not person:
+        return None
+
+    db2 = cred_setup()
+    cred = db2.query(Cred).get(username)
+    return cred.token
+    
+

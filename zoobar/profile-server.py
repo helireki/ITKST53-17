@@ -10,6 +10,7 @@ import socket
 import bank
 import bank_client
 import zoodb
+import auth_client
 
 from debug import *
 
@@ -49,7 +50,8 @@ class ProfileAPIServer(rpclib.RpcServer):
                }
 
     def rpc_xfer(self, target, zoobars):
-        bank_client.transfer(self.user, target, zoobars)
+        token = auth_client.get_token(self.user)
+        bank_client.transfer(self.user, target, zoobars, token)
 
 def run_profile(pcode, profile_api_client):
     globals = {'api': profile_api_client}

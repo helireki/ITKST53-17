@@ -87,7 +87,7 @@ set_perms 61017:61014 775 /jail/zoobar/db/transfer
 set_perms 61017:61014 774 /jail/zoobar/db/transfer/transfer.db
 
 set_perms 61016:61014 700 /jail/zoobar/db/cred
-set_perms 61016:61014 744 /jail/zoobar/db/cred/cred.db
+set_perms 61016:61016 740 /jail/zoobar/db/cred/cred.db
 
 set_perms 61017:61017 775 /jail/zoobar/db/bank
 set_perms 61017:61017 744 /jail/zoobar/db/bank/bank.db

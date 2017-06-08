@@ -1,12 +1,17 @@
 from zoodb import *
 from debug import *
 
+import auth_client
+
 import time
 
-def transfer(sender, recipient, zoobars):
+def transfer(sender, recipient, zoobars, token):
     persondb = person_setup()
     senderp = persondb.query(Person).get(sender)
     recipientp = persondb.query(Person).get(recipient)
+
+    if not auth_client.check_token(sender, token):
+        raise ValueError()
 
     bankdb = bank_setup()
     senderb = bankdb.query(Bank).get(sender)

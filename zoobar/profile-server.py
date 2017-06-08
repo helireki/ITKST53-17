@@ -11,6 +11,7 @@ import bank
 import bank_client
 import zoodb
 import auth_client
+import re
 
 from debug import *
 
@@ -59,9 +60,14 @@ def run_profile(pcode, profile_api_client):
 
 class ProfileServer(rpclib.RpcServer):
     def rpc_run(self, pcode, user, visitor):
-        uid = 0
+        uid = 61018
 
-        userdir = '/tmp'
+        #userdir = '/tmp'
+        userdir_raw = '/tmp/' + '%s' % user
+        userdir = re.escape(userdir_raw)
+        if not os.path.exists(userdir):
+            os.makedirs(userdir)
+            os.chmod(userdir, 0774)
 
         (sa, sb) = socket.socketpair(socket.AF_UNIX, socket.SOCK_STREAM, 0)
         pid = os.fork()

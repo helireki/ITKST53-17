@@ -1,5 +1,5 @@
 [zookd.c:70]
-[http.c:448,458]
+[http.c:448, 453, 458, 465]
 reqpath-puskuri voi ylivuodon seurauksena kirjoittaa yli senhetkisen paluuosoitteen, koska reqpathin koko on rajoitettu, mutta missään ei tarkisteta, onko vastaaotettu syöte liian pitkä.
 dst-muuttuja (joka osoittaa reqpathiin, jolle on annettu staattinen koko) voi kirjoittaa yli paluuosoitteen, jota tarvitaan process_clientista sitä kutsuneeseen ohjelmaan palattaessa.
 Ylivuoto tapahtuu, jos HTTP-pyyntö on esim. seuraava:
@@ -11,14 +11,16 @@ Ylivuoto tapahtuu, jos HTTP-pyyntö on esim. seuraava:
     <paste offending line(s) of code here>
     <if ((errmsg = http_request_line(fd, reqpath, env, &env_len)))>
     <*dst = strtol(&hexbuf[0], 0, 16);
-     *dst = *src;>
+     *dst = ' ';
+     *dst = *src;
+     dst++;>
 
 Tämän pystyy estämään käyttämällä stack canary -menetelmää.
 
 
 
 [http.c:159]
-[http.c:448, 458]
+[http.c:448, 453, 458, 465]
 value-puskurin ylivuoto voi kirjoittaa yli paluuosoitteen, koska valuen koko on rajoitettu, eikä missään tarkisteta, meneekö vastaanotettu syöte yli rajojen.
 Ylivuoto tapahtuu, jos HTTP-pyyntö on seuraava:
  
@@ -28,7 +30,9 @@ merkkijono = "a"
 
     <url_decode(value, sp);>
     <*dst = strtol(&hexbuf[0], 0, 16);
-     *dst = *src;>
+     *dst = ' ';
+     *dst = *src;
+     dst++;>
 
 Tämän pystyy estämään käyttämällä stack canary -menetelmää.
 

@@ -61,7 +61,7 @@ int http_read_line(int fd, char *buf, size_t size)
     return -1;
 }
 
-const char *http_request_line(int fd, char *reqpath, char *env, size_t *env_len)
+const char *http_request_line(int fd, char *reqpath, char *env, size_t *env_len, int koko)
 {
     static char buf[8192];      /* static variables are not on the stack */
     char *sp1, *sp2, *qp, *envp = env;
@@ -102,7 +102,7 @@ const char *http_request_line(int fd, char *reqpath, char *env, size_t *env_len)
     }
 
     /* decode URL escape sequences in the requested path into reqpath */
-    url_decode(reqpath, sp1);
+    url_decode(reqpath, sp1, koko);
 
     envp += sprintf(envp, "REQUEST_URI=%s", reqpath) + 1;
 
@@ -156,13 +156,17 @@ const char *http_request_headers(int fd)
         }
 
         /* Decode URL escape sequences in the value */
-        url_decode(value, sp);
+        url_decode(value, sp, 512);
 
         /* Store header in env. variable for application code */
         /* Some special headers don't use the HTTP_ prefix. */
         if (strcmp(buf, "CONTENT_TYPE") != 0 &&
             strcmp(buf, "CONTENT_LENGTH") != 0) {
-            sprintf(envvar, "HTTP_%s", buf);
+            //tämä muutettu sellaiseksi, että ei lisää envvariinn liikaa
+            //sprintf(envvar, "HTTP_%s", buf);
+            int size_w = 512 - 1 - 5;
+            snprintf(envvar, size_w, "HTTP_%s", buf);
+
             setenv(envvar, value, 1);
         } else {
             setenv(buf, value, 1);
@@ -275,11 +279,14 @@ void http_serve(int fd, const char *name)
     void (*handler)(int, const char *) = http_serve_none;
     char pn[1024];
     struct stat st;
+    char* cwd;
 
-    getcwd(pn, sizeof(pn));
+    cwd = getcwd(pn, sizeof(pn));
     setenv("DOCUMENT_ROOT", pn, 1);
 
-    strcat(pn, name);
+    //tämä muutettu sellaiseksi, että ei lisää /home/httpd/lab perään liikaa
+    //strcat(pn, name);
+    strncat(pn, name, sizeof(pn)-strlen(cwd)-1);
     split_path(pn);
 
     if (!stat(pn, &st))
@@ -341,7 +348,13 @@ void http_serve_file(int fd, const char *pn)
 }
 
 void dir_join(char *dst, const char *dirname, const char *filename) {
-    strcpy(dst, dirname);
+    //tämä muutettu sellaiseksi, että ei lisää liikaa
+    //strcpy(dst, dirname);
+    if (strlen(dst) > 0)
+    {
+        dst[0] = '\0';
+        strncat(dst, dirname, strlen(dst) - 10 - 1); //jotta filenamelle jää tilaa
+    }
     if (dst[strlen(dst) - 1] != '/')
         strcat(dst, "/");
     strcat(dst, filename);
@@ -434,9 +447,10 @@ void http_serve_executable(int fd, const char *pn)
     }
 }
 
-void url_decode(char *dst, const char *src)
+void url_decode(char *dst, const char *src, int koko)
 {
-    for (;;)
+    int i;
+    for (i = 0;i < koko-1;i++)
     {
         if (src[0] == '%' && src[1] && src[2])
         {
@@ -464,6 +478,7 @@ void url_decode(char *dst, const char *src)
 
         dst++;
     }
+    *dst = '\0';
 }
 
 void env_deserialize(const char *env, size_t len)

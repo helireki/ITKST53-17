@@ -190,6 +190,14 @@ class sym_minus(sym_binop):
 ## Exercise 2: your code here.
 ## Implement AST nodes for division and multiplication.
 
+class sym_mult(sym_binop):
+  def _z3expr(self, printable):
+    return z3expr(self.a, printable) * z3expr(self.b, printable)
+
+class sym_div(sym_binop):
+  def _z3expr(self, printable):
+    return z3expr(self.a, printable) / z3expr(self.b, printable)
+
 ## String operations
 
 class sym_str(sym_ast):
@@ -482,6 +490,14 @@ class concolic_int(int):
 
   ## Exercise 2: your code here.
   ## Implement symbolic division and multiplication.
+
+  def __mult__(self, o):
+    res = self.__v * o
+    return concolic_int(sym_mult(ast(self), ast(o)), res)
+
+  def __div__(self, o):
+    res = self.__v / o
+    return concolic_int(sym_div(ast(self), ast(o)), res)
 
   def _sym_ast(self):
     return self.__sym

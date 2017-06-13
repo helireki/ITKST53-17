@@ -748,13 +748,14 @@ def concolic_test(testfunc, maxiter = 100, verbose = 0):
     for (branch, caller) in zip(cur_path_constr, cur_path_constr_callers):
       neg = sym_not(branch) 
       if constraints:
-        prev_con  = sym_and(*constraints)
-        constr = sym_and(prev_con, neg)
+        new_con  = constraints + [neg]
+        constr = sym_and(*new_con)
       else:
         constr = neg
       constraints.append(branch)
-      if constr not in checked:
-        checked.add(constr)
+      if constr in checked:
+        continue
+      checked.add(constr)
       (ok, model) = fork_and_check(constr)
       if ok == z3.sat:
         new_values = concrete_values.copy()

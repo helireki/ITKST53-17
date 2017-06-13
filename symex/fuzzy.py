@@ -190,7 +190,7 @@ class sym_minus(sym_binop):
 ## Exercise 2: your code here.
 ## Implement AST nodes for division and multiplication.
 
-class sym_mult(sym_binop):
+class sym_mul(sym_binop):
   def _z3expr(self, printable):
     return z3expr(self.a, printable) * z3expr(self.b, printable)
 
@@ -491,9 +491,9 @@ class concolic_int(int):
   ## Exercise 2: your code here.
   ## Implement symbolic division and multiplication.
 
-  def __mult__(self, o):
+  def __mul__(self, o):
     res = self.__v * o
-    return concolic_int(sym_mult(ast(self), ast(o)), res)
+    return concolic_int(sym_mul(ast(self), ast(o)), res)
 
   def __div__(self, o):
     res = self.__v / o
@@ -538,6 +538,16 @@ class concolic_str(str):
   ## Exercise 4: your code here.
   ## Implement symbolic versions of string length (override __len__)
   ## and contains (override __contains__).
+
+  def __len__(self):
+    res = len(self.__v)
+    return concolic_int(sym_length(ast(self)), res)
+
+  def __contains__(self, o):
+    res = False
+    if o in self.__v:
+      res = True
+    return concolic_bool(sym_contains(ast(self), ast(o)), res)
 
   def startswith(self, o):
     res = self.__v.startswith(o)
@@ -733,6 +743,15 @@ def concolic_test(testfunc, maxiter = 100, verbose = 0):
     ##   such as if that variable turns out to be irrelevant to
     ##   the overall constraint, so be sure to preserve values
     ##   from the initial input (concrete_values).
+
+    for (branch, caller) in zip(cur_path_constr, cur_path_constr_callers):
+      constr = sym_not(branch)
+      if constr not in checked:
+        checked.add(constr)
+      (ok, model) = fork_and_check(constr)
+      if ok == z3.sat:
+        new_values = model
+        inputs.add(new_values,caller)
 
   if verbose > 0:
     print 'Stopping after', iter, 'iterations'

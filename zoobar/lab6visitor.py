@@ -66,7 +66,8 @@ class LabVisitor(object):
         return ''.join(output)
 
     def visit_Identifier(self, node):
-        return node.value
+        newvalue = 'sandbox_' + node.value
+        return newvalue
 
     def visit_Assign(self, node):
         # Note: if node.op is ':' this "assignment" is actually a property in
@@ -78,6 +79,9 @@ class LabVisitor(object):
             template = '%s %s %s'
         if getattr(node, '_parens', False):
             template = '(%s)' % template
+        if node.op == ":":
+            return template % (
+                self.visit(node.left).replace("sandbox_", ""), node.op, self.visit(node.right))
         return template % (
             self.visit(node.left), node.op, self.visit(node.right))
 
@@ -322,7 +326,7 @@ class LabVisitor(object):
             template = '(%s.%s)'
         else:
             template = '%s.%s'
-        s = template % (self.visit(node.node), self.visit(node.identifier))
+        s = template % (self.visit(node.node), self.visit(node.identifier).replace("sandbox_", ""))
         return s
 
     def visit_BracketAccessor(self, node):

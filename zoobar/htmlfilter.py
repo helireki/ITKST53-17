@@ -14,6 +14,8 @@ libcode = '''
             return {
                 get onclick() { return e.onclick; },
                 set onclick(h) { e.onclick = h; },
+                get textContent() { return e.textContent; },
+                set  textContent(h) {e.textContent = h; },
             }
         },
     };
@@ -30,6 +32,13 @@ libcode = '''
             eval(its_okay_no_one_will_ever_define_this_variable);
         } catch (e) {
         }
+    }
+ 
+    function sandbox_setTimeout(f, secs) {
+        if (typeof f == "function"){
+            //miksi eval (f) tassa kohdassa
+            setTimeout(f, secs);
+      }
     }
 </script>
 '''

@@ -326,11 +326,15 @@ class LabVisitor(object):
             template = '(%s.%s)'
         else:
             template = '%s.%s'
-        s = template % (self.visit(node.node), self.visit(node.identifier).replace("sandbox_", ""))
+        
+        res = self.visit(node.identifier).replace("sandbox_", "")
+        if res == "__proto__" or res == "constructor" or res == "__defineGetter__" or res == "__defineSetter__":
+            res = "__invalid__"
+        s = template % (self.visit(node.node), (res))
         return s
 
     def visit_BracketAccessor(self, node):
-        s = '%s[%s]' % (self.visit(node.node), self.visit(node.expr))
+        s = '%s[bracket_check(%s)]' % (self.visit(node.node), (self.visit(node.expr)))
         return s
 
     def visit_FunctionCall(self, node):
@@ -367,5 +371,5 @@ class LabVisitor(object):
         return s
 
     def visit_This(self, node):
-        return 'this'
+        return 'this_check(this)'
 

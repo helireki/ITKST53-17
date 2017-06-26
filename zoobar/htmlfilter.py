@@ -36,9 +36,29 @@ libcode = '''
  
     function sandbox_setTimeout(f, secs) {
         if (typeof f == "function"){
-            //miksi eval (f) tassa kohdassa
             setTimeout(f, secs);
       }
+    }
+
+    function check(s) {
+        var ret = s === "__proto__" || s === "constructor" || s === "__defineGetter__" || s === "__defineSetter__";
+        return ret;
+    }
+
+    function bracket_check(s) {
+        if (check(s)){
+            return "__invalid__";
+        }
+        else {
+            s.toString = Object.prototype.toString();
+            s.valueOf = Object.prototype.valueOf();
+            return s;
+        }
+    }
+ 
+    function this_check(s) {
+        if (s === window) return null;
+        return s;
     }
 </script>
 '''

@@ -173,6 +173,8 @@ class LabVisitor(object):
         return 'null'
 
     def visit_String(self, node):
+        if 'window.location =' in node.value:
+            return '"sandbox_' + node.value[1:]
         return node.value
 
     def visit_Continue(self, node):

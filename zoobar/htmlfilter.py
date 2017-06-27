@@ -35,9 +35,9 @@ libcode = '''
     }
  
     function sandbox_setTimeout(f, secs) {
-        if (typeof f == "function"){
+        if (typeof f == "function") {
             setTimeout(f, secs);
-      }
+        } 
     }
 
     function check(s) {
@@ -49,15 +49,21 @@ libcode = '''
         if (check(s)){
             return "__invalid__";
         }
-        else {
-            s.toString = Object.prototype.toString();
-            s.valueOf = Object.prototype.valueOf();
-            return s;
-        }
+        s.toString = Object.prototype.toString();
+        s.valueOf = Object.prototype.valueOf();
+        return s;
     }
  
     function this_check(s) {
         if (s === window) return null;
+        return s;
+    }
+
+    function eval_check(s) {
+        var str = "window.location";
+        if (s.indexOf(str) !== -1) {
+            return "__invalid__";
+        }
         return s;
     }
 </script>

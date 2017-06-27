@@ -58,14 +58,6 @@ libcode = '''
         if (s === window) return null;
         return s;
     }
-
-    function eval_check(s) {
-        var str = "window.location";
-        if (s.indexOf(str) !== -1) {
-            return "__invalid__";
-        }
-        return s;
-    }
 </script>
 '''
 

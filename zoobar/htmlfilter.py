@@ -13,7 +13,8 @@ libcode = '''
             var e = document.getElementById('sandbox-' + id);
             return {
                 get onclick() { return e.onclick; },
-                set onclick(h) { e.onclick = h; },
+                set onclick(h) { e.onclick = h; }, 
+                //added support for textContent
                 get textContent() { return e.textContent; },
                 set  textContent(h) {e.textContent = h; },
             }
@@ -34,17 +35,20 @@ libcode = '''
         }
     }
  
+    //added support for setTimeout
     function sandbox_setTimeout(f, secs) {
         if (typeof f == "function") {
             setTimeout(f, secs);
         } 
     }
 
+    //checking if object is certain string
     function check(s) {
         var ret = s === "__proto__" || s === "constructor" || s === "__defineGetter__" || s === "__defineSetter__";
         return ret;
     }
 
+    //checking that brackets don't have bad arguments
     function bracket_check(s) {
         if (check(s)){
             return "__invalid__";
@@ -54,6 +58,7 @@ libcode = '''
         return s;
     }
  
+    //check if this refers to window
     function this_check(s) {
         if (s === window) return null;
         return s;

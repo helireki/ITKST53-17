@@ -66,6 +66,7 @@ class LabVisitor(object):
         return ''.join(output)
 
     def visit_Identifier(self, node):
+        #adding prefix
         newvalue = 'sandbox_' + node.value
         return newvalue
 
@@ -79,6 +80,7 @@ class LabVisitor(object):
             template = '%s %s %s'
         if getattr(node, '_parens', False):
             template = '(%s)' % template
+        #deleting prefix from unquoted identifiers from object literals
         if node.op == ":":
             return template % (
                 self.visit(node.left).replace("sandbox_", ""), node.op, self.visit(node.right))
@@ -173,6 +175,7 @@ class LabVisitor(object):
         return 'null'
 
     def visit_String(self, node):
+        #preventing bad-13-event.html
         if 'window.location =' in node.value:
             return '"sandbox_' + node.value[1:]
         return node.value
@@ -329,13 +332,16 @@ class LabVisitor(object):
         else:
             template = '%s.%s'
         
+        #deleting prefix from attributes e.g. foo.bar
         res = self.visit(node.identifier).replace("sandbox_", "")
+        #preventing access to dangerous properties
         if res == "__proto__" or res == "constructor" or res == "__defineGetter__" or res == "__defineSetter__":
             res = "__invalid__"
         s = template % (self.visit(node.node), (res))
         return s
 
     def visit_BracketAccessor(self, node):
+        #preventing access to dangerous properties with brackets
         s = '%s[bracket_check(%s)]' % (self.visit(node.node), (self.visit(node.expr)))
         return s
 

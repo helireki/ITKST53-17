@@ -4,10 +4,12 @@ from debug import *
 import time
 
 def transfer(sender, recipient, zoobars):
+    #EXERCISE 7
     if sender == recipient:
         raise AttributeError()
     if zoobars < 0:
         raise ValueError()
+
     persondb = person_setup()
     senderp = persondb.query(Person).get(sender)
     recipientp = persondb.query(Person).get(recipient)

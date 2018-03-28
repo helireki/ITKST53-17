@@ -4,3 +4,5 @@ Course work for JYU course Software Security. Based on the MIT course 6.858 Comp
 There was some problems with my commits. 
 It shows that all my commits done in the summer of 2017 are done by the original owner of the repo I cloned.
 All commits done in Finnish are mine.
+
+MIT course page: https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-858-computer-systems-security-fall-2014/
